@@ -1,0 +1,76 @@
+--- omnetpp-3.1/Makefile.in.orig	2005-04-01 06:59:03.000000000 +0200
++++ omnetpp-3.1/Makefile.in	2005-04-03 15:35:35.000000000 +0200
+@@ -68,7 +68,7 @@
+ # Programs
+ #
+ 
+-nedc:
++nedc: nedxml
+ 	cd $(OMNETPP_SRC_DIR)/nedc && $(MAKE)
+ 
+ gned:
+@@ -87,49 +87,49 @@
+ # Sample programs
+ #
+ 
+-aloha:
++aloha: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-cqn:
++cqn: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-dyna:
++dyna: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-fddi:
++fddi: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-fifo:
++fifo: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-hcube:
++hcube: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-hist:
++hist: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-neddemo:
++neddemo: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-p-to-p:
++p-to-p: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-queueing:
++queueing: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-routing:
++routing: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-queues:
++queues: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-tictoc:
++tictoc: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-tokenring:
++tokenring: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+-sockets:
++sockets: nedc
+ 	cd $(OMNETPP_SAMPLES_DIR)/$@ && $(MAKE)
+ 
+ #

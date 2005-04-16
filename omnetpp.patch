@@ -1,0 +1,189 @@
+diff -uNdr omnetpp-3.1.old1/configure.in omnetpp-3.1/configure.in
+--- omnetpp-3.1.old1/configure.in	2005-04-01 06:59:05.000000000 +0200
++++ omnetpp-3.1/configure.in	2005-04-13 09:20:45.000000000 +0200
+@@ -104,15 +104,19 @@
+ OMNETPP_SCALARS_DIR="$OMNETPP_SRC_DIR/scalars"
+ OMNETPP_PLOVE_DIR="$OMNETPP_SRC_DIR/plove"
+ 
+-CFLAGS='-g Wall'
++OMNETPP_DEST_BIN_DIR="$bindir"
++OMNETPP_DEST_INCL_DIR="$includedir/omnetpp"
++OMNETPP_DEST_LIB_DIR="$libdir"
++OMNETPP_DEST_DOC_DIR="$datadir/doc/omnetpp"
++OMNETPP_DEST_DATA_DIR="$datadir/omnetpp"
++
+ #CFLAGS='-O3 -DNDEBUG=1'
+ NEDCFLAGS='-Wno-unused'
+ 
+-LDFLAGS=
+-
+ AS="as"
+ AR="ar cr"
+-SHLIB_LD="$CXX -shared -fPIC"
++SHLIB_LDFLAGS="-shared -fPIC"
++SHLIB_LD="$CXX $SHLIB_LDFLAGS"
+ SHLIB_CFLAGS="-fPIC"
+ NEDC="nedtool"
+ MSGC="opp_msgc"
+@@ -177,8 +181,8 @@
+ EXPAT_LIBS=-lexpat
+ 
+ # for LibXML
+-LIBXML_CFLAGS=
+-LIBXML_LIBS="-lxml2"
++LIBXML_CFLAGS=`xml2-config --cflags`
++LIBXML_LIBS=`xml2-config --libs`
+ 
+ # for Akaroa
+ AKAROA_CFLAGS=
+@@ -387,12 +391,6 @@
+ if test "$WISH" = nope; then
+    AC_MSG_ERROR([Cannot find wish, part of Tcl/Tk -- maybe it is not in the PATH or has some exotic name (tested names were: wish wish85 wish8.5 wish84 wish8.4 cygwish cygwish85 cygwish84)])
+ fi
+-if echo 'puts OK; exit' | $WISH | grep OK >/dev/null; then :; else
+-    AC_MSG_ERROR([Cannot run wish (wish command "puts OK; exit" failed): maybe you're not running X or DISPLAY environment variable not set?])
+-fi
+-if echo 'catch {package require Tk 8.4; puts OK}; exit' | $WISH | grep OK >/dev/null; then :; else
+-    AC_MSG_ERROR([wish command "package require Tk 8.4" failed: probably old Tcl/Tk version, version 8.4.0+ required])
+-fi
+ 
+ 
+ #----------------------
+@@ -573,6 +571,13 @@
+ AC_SUBST(OMNETPP_TEST_DIR)
+ dnl AC_SUBST(OMNETPP_MODELS_DIR)
+ 
++AC_SUBST(OMNETPP_DEST_BIN_DIR)
++AC_SUBST(OMNETPP_DEST_INCL_DIR)
++AC_SUBST(OMNETPP_DEST_LIB_DIR)
++AC_SUBST(OMNETPP_DEST_DOC_DIR)
++AC_SUBST(OMNETPP_DEST_DATA_DIR)
++
++
+ AC_SUBST(YACC)
+ AC_SUBST(LEX)
+ AC_SUBST(CC)
+@@ -588,6 +593,7 @@
+ AC_SUBST(AR)
+ AC_SUBST(RANLIB)
+ AC_SUBST(SHLIB_LD)
++AC_SUBST(SHLIB_LDFLAGS)
+ AC_SUBST(WISH)
+ AC_SUBST(MAKEDEPEND)
+ AC_SUBST(XSLTPROC)
+diff -uNdr omnetpp-3.1.old1/configure.user omnetpp-3.1/configure.user
+--- omnetpp-3.1.old1/configure.user	2005-04-01 08:02:31.000000000 +0200
++++ omnetpp-3.1/configure.user	2005-04-13 09:07:18.000000000 +0200
+@@ -17,7 +17,7 @@
+ #CFLAGS='-g -Wno-unused'
+ #CFLAGS='-g -Wall'
+ #CFLAGS='-gstabs+3 -Wall'
+-CFLAGS='-O2 -DNDEBUG=1'
++CFLAGS=${CFLAGS:- -O2 -DNDEBUG=1}
+ 
+ # To suppress the 'unused variable' warnings in ned-generated _n.cc files
+ # -Wno-unused is added to NEDCFLAGS
+@@ -152,13 +152,13 @@
+ # Some more OMNeT++ variables. They select the programs opp_makemake-generated
+ # makefiles will use. (They get default values if commented out.)
+ #
+-NEDC="$OMNETPP_BIN_DIR/nedtool"
+-#MSGC="$OMNETPP_BIN_DIR/opp_msgc"
++NEDC="$OMNETPP_DEST_BIN_DIR/nedtool"
++MSGC="$OMNETPP_DEST_BIN_DIR/opp_msgc"
+ 
+ #
+ #
+ # Override the following setting if you have additional icons somewhere else.
+ #
+-#OMNETPP_BITMAP_PATH="./bitmaps;$OMNETPP_ROOT/bitmaps"
++OMNETPP_BITMAP_PATH=".;./bitmaps;$datadir/omnetpp/bitmaps"
+ 
+ 
+diff -uNdr omnetpp-3.1.old1/src/utils/opp_makemake.in omnetpp-3.1/src/utils/opp_makemake.in
+--- omnetpp-3.1.old1/src/utils/opp_makemake.in	2005-03-29 03:57:57.000000000 +0200
++++ omnetpp-3.1/src/utils/opp_makemake.in	2005-04-13 09:13:45.000000000 +0200
+@@ -318,10 +318,10 @@
+ #
+ NEDC=@NEDC@
+ MSGC=@MSGC@
+-CXX=@CXX@
+-CC=@CC@
++#CXX=
++#CC=
+ AR=@AR@
+-SHLIB_LD=@SHLIB_LD@
++SHLIB_LD=\$(CXX) @SHLIB_LDFLAGS@
+ MAKEDEPEND=@MAKEDEPEND@
+ 
+ CFLAGS=@CFLAGS@
+@@ -332,8 +332,8 @@
+ WITH_PARSIM=@WITH_PARSIM@
+ WITH_NETBUILDER=@WITH_NETBUILDER@
+ 
+-OMNETPP_INCL_DIR=@OMNETPP_INCL_DIR@
+-OMNETPP_LIB_DIR=@OMNETPP_LIB_DIR@
++OMNETPP_INCL_DIR=@OMNETPP_DEST_INCL_DIR@
++OMNETPP_LIB_DIR=@OMNETPP_DEST_LIB_DIR@
+ 
+ TK_LIBS=@TK_LIBS@
+ MPI_LIBS=@MPI_LIBS@
+@@ -495,10 +495,10 @@
+ # import them from a common file -- see opp_makemake -c flag.
+ NEDC=@NEDC@
+ MSGC=@MSGC@
+-CXX=@CXX@
+-CC=@CC@
++#CXX=@CXX@
++#CC=@CC@
+ AR=@AR@
+-SHLIB_LD=@SHLIB_LD@
++SHLIB_LD=\$(CXX) @SHLIB_LDFLAGS@
+ MAKEDEPEND=@MAKEDEPEND@
+ 
+ CFLAGS=@CFLAGS@
+@@ -509,8 +509,8 @@
+ WITH_PARSIM=@WITH_PARSIM@
+ WITH_NETBUILDER=@WITH_NETBUILDER@
+ 
+-OMNETPP_INCL_DIR=@OMNETPP_INCL_DIR@
+-OMNETPP_LIB_DIR=@OMNETPP_LIB_DIR@
++OMNETPP_INCL_DIR=@OMNETPP_DEST_INCL_DIR@
++OMNETPP_LIB_DIR=@OMNETPP_DEST_LIB_DIR@
+ 
+ TK_LIBS=@TK_LIBS@
+ MPI_LIBS=@MPI_LIBS@
+@@ -527,10 +527,10 @@
+ 
+ NEDC=@${null}NEDC@
+ MSGC=@${null}MSGC@
+-CXX=@${null}CXX@
+-CC=@${null}CC@
++#CXX=@${null}CXX@
++#CC=@${null}CC@
+ AR=@${null}AR@
+-SHLIB_LD=@${null}SHLIB_LD@
++SHLIB_LD=\$(CXX) @${null}SHLIB_LDFLAGS@
+ MAKEDEPEND=@${null}MAKEDEPEND@
+ 
+ CFLAGS=@${null}CFLAGS@
+@@ -541,8 +541,8 @@
+ WITH_PARSIM=@${null}WITH_PARSIM@
+ WITH_NETBUILDER=@${null}WITH_NETBUILDER@
+ 
+-OMNETPP_INCL_DIR=@${null}OMNETPP_INCL_DIR@
+-OMNETPP_LIB_DIR=@${null}OMNETPP_LIB_DIR@
++OMNETPP_INCL_DIR=@${null}OMNETPP_DEST_INCL_DIR@
++OMNETPP_LIB_DIR=@${null}OMNETPP_DEST_LIB_DIR@
+ 
+ TK_LIBS=@${null}TK_LIBS@
+ MPI_LIBS=@${null}MPI_LIBS@
+diff -uNdr omnetpp-3.1.old1/src/utils/splitvec omnetpp-3.1/src/utils/splitvec
+--- omnetpp-3.1.old1/src/utils/splitvec	1999-05-15 14:20:00.000000000 +0200
++++ omnetpp-3.1/src/utils/splitvec	2005-04-13 09:06:13.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/awk -f
++#!/bin/awk -f
+ #
+ # Splits an output vector (.vec) file into files with one vector in each
+ #   ie: foo.vec --> foo-1.vec, foo-2.vec, foo-3.vec,...
