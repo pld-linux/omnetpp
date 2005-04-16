@@ -1,4 +1,5 @@
 Summary:	OMNeT++ - object-oriented discrete event simulation framework
+Summary(pl):	OMNeT++ - zorientowane obiektowo ¶rodowisko do symulacji zdarzeñ dyskretnych
 Name:		omnetpp
 Version:	3.1
 Release:	0.2
@@ -20,15 +21,19 @@ OMNeT++ is a feature-rich C++-based object-oriented discrete event
 simulation framework, primarily targeted at the simulation of
 communication networks and other parallel/distributed systems.
 
+%description -l pl
+OMNeT++ to bogate w mo¿liwo¶ci, oparte na C++, zorientowane obiektowo
+¶rodowisko do symulacji zdarzeñ dyskretnych, g³ównie przeznaczone do
+symulacji sieci komunikacyjnych i innych systemów
+równoleg³ych/rozproszonych.
+
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
 
 %build
-cp -f /usr/share/automake/config.sub src/utils
-cp -f /usr/share/automake/config.guess src/utils
-
+cp -f /usr/share/automake/config.* src/utils
 %{__autoconf}
 %configure
 
@@ -42,16 +47,16 @@ export LD_LIBRARY_PATH
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_bindir},%{_libdir},%{_includedir}/omnetpp/{,platdep},%{_datadir}/omnetpp/bitmaps}
-install -d $RPM_BUILD_ROOT/%{_examplesdir}/%{name}-%{version}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}/omnetpp/{,platdep},%{_datadir}/omnetpp/bitmaps}
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-cp bin/* $RPM_BUILD_ROOT/%{_bindir}
-cp -d lib/* $RPM_BUILD_ROOT/%{_libdir}
-cp include/*.h $RPM_BUILD_ROOT/%{_includedir}/omnetpp
-cp include/platdep/*.h $RPM_BUILD_ROOT/%{_includedir}/omnetpp/platdep
-cp -r bitmaps $RPM_BUILD_ROOT/%{_datadir}/omnetpp/
+cp bin/* $RPM_BUILD_ROOT%{_bindir}
+cp -d lib/* $RPM_BUILD_ROOT%{_libdir}
+cp include/*.h $RPM_BUILD_ROOT%{_includedir}/omnetpp
+cp include/platdep/*.h $RPM_BUILD_ROOT%{_includedir}/omnetpp/platdep
+cp -r bitmaps $RPM_BUILD_ROOT%{_datadir}/omnetpp
 
-cp -a samples/* $RPM_BUILD_ROOT/%{_examplesdir}/%{name}-%{version}
+cp -a samples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
