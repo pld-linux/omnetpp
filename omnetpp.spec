@@ -9,9 +9,10 @@ Source0:	http://www.omnetpp.org/download/release/%{name}-%{version}-src.tgz
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}.patch
 URL:		http://www.omnetpp.org/
+BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	tcl-devel
 BuildRequires:	blt-devel
+BuildRequires:	tcl-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -19,15 +20,14 @@ OMNeT++ is a feature-rich C++-based object-oriented discrete event
 simulation framework, primarily targeted at the simulation of
 communication networks and other parallel/distributed systems.
 
-
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
 
 %build
-cp -f %{_datadir}/automake/config.sub src/utils
-cp -f %{_datadir}/automake/config.guess src/utils
+cp -f /usr/share/automake/config.sub src/utils
+cp -f /usr/share/automake/config.guess src/utils
 
 %{__autoconf}
 %configure
