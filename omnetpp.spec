@@ -46,6 +46,9 @@ Provides:	libtkenv.so
 %description libs
 OMNeT++ libraries
 
+%description libs -l pl
+Biblioteki OMNeT++.
+
 %prep
 %setup -q
 %patch0 -p1
