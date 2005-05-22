@@ -1,0 +1,56 @@
+diff -uNdr omnetpp-3.1.old2/src/utils/opp_makemake.in omnetpp-3.1/src/utils/opp_makemake.in
+--- omnetpp-3.1.old2/src/utils/opp_makemake.in	2005-04-24 15:07:17.000000000 +0200
++++ omnetpp-3.1/src/utils/opp_makemake.in	2005-04-24 15:09:03.000000000 +0200
+@@ -415,11 +415,11 @@
+ done
+ 
+ if [ "$ignorened" = "y" ]; then
+-    objs=`echo *.msg *.cc`
++    objs=`echo *.msg *.cc *.cpp`
+ else
+-    objs=`echo *.ned *.msg *.cc`
++    objs=`echo *.ned *.msg *.cc *.cpp`
+ fi
+-objs=`echo $objs | sed 's/\*[^ ]*//g; s/[^ ]*_n\.cc//g; s/[^ ]*_m\.cc//g; s/\.ned/_n.o/g; s/\.msg/_m.o/g; s/\.cc/.o/g'`
++objs=`echo $objs | sed 's/\*[^ ]*//g; s/[^ ]*_n\.cc//g; s/[^ ]*_m\.cc//g; s/\.ned/_n.o/g; s/\.msg/_m.o/g; s/\.cc/.o/g; s/\.cpp/.o/g'`
+ 
+ generatedheaders=`echo *.msg | sed 's/\*[^ ]*//g; s/\.msg/_m.h/g'`
+ 
+@@ -720,6 +720,15 @@
+         echo '	$(CXX) -c $(COPTS) '$i
+         echo
+ done
++for i in `echo *.cpp`
++do
++        if [ "$i" = "*.cpp" ]; then break; fi;
++
++        obj=`echo $i | sed 's/\.cpp/.o/g'`
++        echo "$obj: $i"
++        echo '	$(CXX) -c $(COPTS) '$i
++        echo
++done
+ 
+ # prevent accumulating of "-f" options during subsequent remakes
+ # also kill "-m" options
+@@ -751,8 +760,8 @@
+ 	for i in \$(SUBDIRS); do (cd \$\$i && \$(MAKE) clean); done
+ 
+ depend:
+-	\$(MAKEDEPEND) \$(INCLUDE_PATH) -- *.cc
+-	# \$(MAKEDEPEND) \$(INCLUDE_PATH) -fMakefile.in -- *.cc
++	\$(MAKEDEPEND) \$(INCLUDE_PATH) -- *.cc *.cpp
++	# \$(MAKEDEPEND) \$(INCLUDE_PATH) -fMakefile.in -- *.cc *.cpp
+ 	for i in \$(SUBDIRS); do (cd \$\$i && \$(MAKE) depend) || exit 1; done
+ 
+ makefiles:
+@@ -778,8 +787,8 @@
+ 
+ echo "$outputfile created, adding dependencies..."
+ 
+-if ! $MAKEDEPEND $includes -f$outputfile -- *.cc; then
+-    echo "Error: command '$MAKEDEPEND $includes -f$outputfile -- *.cc' returned nonzero exit code"
++if ! $MAKEDEPEND $includes -f$outputfile -- *.cc *.cpp; then
++    echo "Error: command '$MAKEDEPEND $includes -f$outputfile -- *.cc *.cpp' returned nonzero exit code"
+ else
+     echo "Done."
+ fi
