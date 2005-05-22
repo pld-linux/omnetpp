@@ -1,6 +1,6 @@
 diff -uNdr omnetpp-3.1.old1/configure.in omnetpp-3.1/configure.in
 --- omnetpp-3.1.old1/configure.in	2005-04-01 06:59:05.000000000 +0200
-+++ omnetpp-3.1/configure.in	2005-04-13 09:20:45.000000000 +0200
++++ omnetpp-3.1/configure.in	2005-05-22 18:22:08.000000000 +0200
 @@ -104,15 +104,19 @@
  OMNETPP_SCALARS_DIR="$OMNETPP_SRC_DIR/scalars"
  OMNETPP_PLOVE_DIR="$OMNETPP_SRC_DIR/plove"
@@ -73,7 +73,7 @@ diff -uNdr omnetpp-3.1.old1/configure.in omnetpp-3.1/configure.in
  AC_SUBST(XSLTPROC)
 diff -uNdr omnetpp-3.1.old1/configure.user omnetpp-3.1/configure.user
 --- omnetpp-3.1.old1/configure.user	2005-04-01 08:02:31.000000000 +0200
-+++ omnetpp-3.1/configure.user	2005-04-13 09:07:18.000000000 +0200
++++ omnetpp-3.1/configure.user	2005-05-22 18:23:31.000000000 +0200
 @@ -17,7 +17,7 @@
  #CFLAGS='-g -Wno-unused'
  #CFLAGS='-g -Wall'
@@ -89,8 +89,8 @@ diff -uNdr omnetpp-3.1.old1/configure.user omnetpp-3.1/configure.user
  #
 -NEDC="$OMNETPP_BIN_DIR/nedtool"
 -#MSGC="$OMNETPP_BIN_DIR/opp_msgc"
-+NEDC="$OMNETPP_DEST_BIN_DIR/nedtool"
-+MSGC="$OMNETPP_DEST_BIN_DIR/opp_msgc"
++NEDC="nedtool"
++MSGC="opp_msgc"
  
  #
  #
@@ -102,7 +102,7 @@ diff -uNdr omnetpp-3.1.old1/configure.user omnetpp-3.1/configure.user
  
 diff -uNdr omnetpp-3.1.old1/src/utils/opp_makemake.in omnetpp-3.1/src/utils/opp_makemake.in
 --- omnetpp-3.1.old1/src/utils/opp_makemake.in	2005-03-29 03:57:57.000000000 +0200
-+++ omnetpp-3.1/src/utils/opp_makemake.in	2005-04-13 09:13:45.000000000 +0200
++++ omnetpp-3.1/src/utils/opp_makemake.in	2005-05-22 18:22:08.000000000 +0200
 @@ -318,10 +318,10 @@
  #
  NEDC=@NEDC@
@@ -180,7 +180,7 @@ diff -uNdr omnetpp-3.1.old1/src/utils/opp_makemake.in omnetpp-3.1/src/utils/opp_
  MPI_LIBS=@${null}MPI_LIBS@
 diff -uNdr omnetpp-3.1.old1/src/utils/splitvec omnetpp-3.1/src/utils/splitvec
 --- omnetpp-3.1.old1/src/utils/splitvec	1999-05-15 14:20:00.000000000 +0200
-+++ omnetpp-3.1/src/utils/splitvec	2005-04-13 09:06:13.000000000 +0200
++++ omnetpp-3.1/src/utils/splitvec	2005-05-22 18:22:08.000000000 +0200
 @@ -1,4 +1,4 @@
 -#!/usr/bin/awk -f
 +#!/bin/awk -f
