@@ -3,7 +3,7 @@
 # - add soname
 
 Summary:	OMNeT++ - object-oriented discrete event simulation framework
-Summary(pl.UTF-8):   OMNeT++ - zorientowane obiektowo środowisko do symulacji zdarzeń dyskretnych
+Summary(pl.UTF-8):	OMNeT++ - zorientowane obiektowo środowisko do symulacji zdarzeń dyskretnych
 Name:		omnetpp
 Version:	3.1
 Release:	0.4
@@ -35,7 +35,7 @@ równoległych/rozproszonych.
 
 %package libs
 Summary:	OMNeT++ libraries
-Summary(pl.UTF-8):   Biblioteki dostarczane przez OMNeT++
+Summary(pl.UTF-8):	Biblioteki dostarczane przez OMNeT++
 Group:		Libraries
 Provides:	libcmdenv.so
 Provides:	libenvir.so
